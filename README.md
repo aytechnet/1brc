@@ -7,6 +7,7 @@ I discovered the [One Billion Row Challenge](https://github.com/gunnarmorling/1b
 
 [Here](https://github.com/aytechnet/1brc/blob/main/src/main.go) is a new proposed solution in Golang for this challenge. It was inspired from [Alexander Yastrebov](https://github.com/AlexanderYastrebov) for using FNV-1a hashing and a custom map along with the following optimizations :
  * extensive use of [sync/atomic](https://pkg.go.dev/sync/atomic) in order to avoid the `reduce` computation from all thread
+ * almost no allocation (no GC stress) and memory consumption is very low
  * [FNV-1a hash](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function) is slightly modified to produce a non-zero hash which is used to find an empty slot in hash table (remenber no lock are used)
  * hash collision are only distinguished with length of name (FNV-1a collisions are very rare in general and there are only around 50000 distinct weather station name used)
  * buffer alignement to EOL is done in created thread to speed up the process a little
@@ -14,7 +15,7 @@ I discovered the [One Billion Row Challenge](https://github.com/gunnarmorling/1b
 
 ## Results on a Ryzen 5 8540U with 12Gb of available RAM and a NVMe SSD disk
 
-These are the results from running the challenge winner in Java with alternate proposed Golang implementation on a six core (12 logicial CPUs) on a budget laptop running an AMD Ryzen 5 8540U with 16Gb of RAM and a NVMe SSD disk. Please note there is only 12Gb of available RAM. Tests are run 5 times.
+These are the results from running the challenge winner in Java with alternate proposed Golang implementation on a six core (12 logical CPUs) on a budget laptop running an AMD Ryzen 5 8540U with 16Gb of RAM and a NVMe SSD disk. Please note there is only 12Gb of available RAM. Tests are run 5 times.
 
 | # | Result (m:s.ms) | Implementation     | Language | Submitter     | Notes     |
 |---|-----------------|--------------------|----------|---------------|-----------|
@@ -28,7 +29,7 @@ These are the results from running the challenge winner in Java with alternate p
 
 ## Results on a Ryzen 9 6900HX with 60Gb of available RAM and a NVMe SSD disk
 
-These are the results from running the challenge winner in Java with alternate proposed Golang implementation on a eight core (16 logicial CPUs) of a mini-PC running an AMD Ryzen 9 6900HX with 64Gb of RAM and a NVMe SSD disk. The `measurements.txt` file is fully cached. Tests are run 5 times.
+These are the results from running the challenge winner in Java with alternate proposed Golang implementation on a eight core (16 logical CPUs) of a mini-PC running an AMD Ryzen 9 6900HX with 64Gb of RAM and a NVMe SSD disk. The `measurements.txt` file is fully cached. Tests are run 5 times.
 
 | # | Result (m:s.ms) | Implementation     | Language | Submitter     | Notes     |
 |---|-----------------|--------------------|----------|---------------|-----------|
@@ -43,3 +44,7 @@ These are the results from running the challenge winner in Java with alternate p
 ## Conclusion
 
 This Golang implementation of One Billion Row Challenge seems now to be fastest than the best Java version using OpenJDK but not yet if the Java is compiled using GraalVM with -O3 optimization.
+
+But Golang compilation is more than 1400 times faster than GraaVM native image generation (0.032s compared to 45.578s)
+
+Golang is fantastic!
