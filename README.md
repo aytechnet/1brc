@@ -6,7 +6,7 @@ I discovered the [One Billion Row Challenge](https://github.com/gunnarmorling/1b
 > Grab all your (virtual) threads, reach out to SIMD, optimize your GC, or pull any other trick, and create the fastest implementation for solving this task!
 
 [Here](https://github.com/aytechnet/1brc/blob/main/src/main.go) is a new proposed solution in Golang for this challenge. It was inspired from [Alexander Yastrebov](https://github.com/AlexanderYastrebov) for using FNV-1a hashing and a custom map along with the following optimizations :
- * extensive use of [sync/atomic](https://pkg.go.dev/sync/atomic) in order to avoid the `reduce` computation from all thread
+ * intensive use of [sync/atomic](https://pkg.go.dev/sync/atomic) in order to avoid the `reduce` computation from all thread
  * almost no allocation (no GC stress) and memory consumption is very low
  * [FNV-1a hash](https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function) is slightly modified to produce a non-zero hash which is used to find an empty slot in hash table (remenber no lock are used)
  * hash collision are only distinguished with length of name (FNV-1a collisions are very rare in general and there are only around 50000 distinct weather station name used)
@@ -45,6 +45,6 @@ These are the results from running the challenge winner in Java with alternate p
 
 This Golang implementation of One Billion Row Challenge seems now to be fastest than the best Java version using OpenJDK but not yet if the Java is compiled using GraalVM with -O3 optimization.
 
-But Golang compilation is more than 1400 times faster than GraaVM native image generation (0.032s compared to 45.578s)
+But Golang compilation is more than 1400 times faster than GraaVM native image generation (0.032s compared to 45.578s) on my budget laptop.
 
 Golang is fantastic!
