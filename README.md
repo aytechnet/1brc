@@ -13,6 +13,8 @@ I discovered the [One Billion Row Challenge](https://github.com/gunnarmorling/1b
  * buffer alignement to EOL is done in created thread to speed up the process a little
  * entry.update() has been manualy inlined
 
+Please check the official [One Billion Row Challenge](https://github.com/gunnarmorling/1brc) page for sample data generation, `measurements.txt` file should be accessible on the base directory of this project for testing it.
+
 ## Results on a Ryzen 5 8540U with 12Gb of available RAM and a NVMe SSD disk
 
 These are the results from running the challenge winner in Java with alternate proposed Golang implementation on a six core (12 logical CPUs) on a budget laptop running an AMD Ryzen 5 8540U with 16Gb of RAM and a NVMe SSD disk. Please note there is only 12Gb of available RAM. Tests are run 5 times.
