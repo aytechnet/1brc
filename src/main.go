@@ -337,10 +337,25 @@ func (res *measurements) printResults() {
 	fmt.Print("{")
 	for _, i := range ids {
 		m := &res.results[i]
+
+		var buf [128]byte // name is 100 chars max, each 3 decimals is 5 bytes max on output
+		b := buf[0:0]
+
 		if count > 0 {
-			fmt.Print(", ")
+			b = append(b, ',', ' ')
 		}
-		fmt.Printf("%s=%s/%s/%s", m.nameBuf[0:m.nameLen], decimal.New(m.minT.Load(), -1).StringFixed(1), decimal.New(m.sumT.Load(), -1).Div(decimal.NewFromInt(m.countT.Add(-1))).StringFixed(1), decimal.New(m.maxT.Load(), -1).StringFixed(1))
+		
+		b = append(b, m.nameBuf[0:m.nameLen]...)
+		b = append(b, '=')
+		b = decimal.New(m.minT.Load(), -1).BytesToFixed(b, 1)
+		b = append(b, '/')
+		b = decimal.New(m.sumT.Load(), -1).Div(decimal.NewFromInt(m.countT.Load()-1)).BytesToFixed(b, 1)
+		b = append(b, '/')
+		b = decimal.New(m.maxT.Load(), -1).BytesToFixed(b, 1)
+		count++
+
+		fmt.Print(string(b))
+		// fmt.Printf("%s=%s/%s/%s", m.nameBuf[0:m.nameLen], decimal.New(m.minT.Load(), -1).StringFixed(1), decimal.New(m.sumT.Load(), -1).Div(decimal.NewFromInt(m.countT.Load()-1)).StringFixed(1), decimal.New(m.maxT.Load(), -1).StringFixed(1))
 		count++
 	}
 	fmt.Println("}")
